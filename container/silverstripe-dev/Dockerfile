@@ -1,0 +1,67 @@
+ARG PHP_VERSION
+From php:${PHP_VERSION}-apache-buster
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ----------------------
+#   Silverstripe
+# ----------------------
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
+RUN set -eux; \
+    install-php-extensions \
+        bcmath \
+        mysqli \
+        pdo \
+        pdo_mysql \
+        intl \
+        ldap \
+        gd \
+        soap \
+        tidy \
+        xsl \
+        zip \
+        exif \
+        gmp \
+        opcache; \
+    \
+    docker-php-ext-configure opcache --enable-opcache; \
+    docker-php-ext-install opcache
+# Configure apache & PHP
+ENV DOCUMENT_ROOT /var/www/html
+ENV APACHE_SERVER_NAME localhost
+COPY container/silverstripe-dev/srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
+COPY container/silverstripe-dev/srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
+Run set -eux; \
+    a2enmod rewrite expires remoteip headers; \
+    \
+    echo 'date.timezone = Europe/Zurich' > "$PHP_INI_DIR/conf.d/timezone.ini"; \
+    { \
+        echo 'log_errors = On'; \
+        echo 'error_log = /dev/stderr'; \
+    } > "$PHP_INI_DIR/conf.d/errors.ini"
+
+# ----------------------
+#   Composer
+# ----------------------
+RUN set -eux; \
+    apt-get update -qq; \
+    apt-get install git vim -yqq; \
+    rm -rf /var/lib/apt/lists/*
+COPY --from="composer" /usr/bin/composer /usr/bin/composer
+
+# ----------------------
+#   Chromedriver
+# ----------------------
+RUN set -eux; \
+    apt update -qq; \
+    apt install wget unzip libnss3 gnupg -yqq; \
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - ;\
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list ;\
+    apt update -qq; \
+    apt install google-chrome-stable -yqq; \
+    rm -rf /var/lib/apt/lists/*
+# Install chromedriver
+RUN VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE); \
+    wget https://chromedriver.storage.googleapis.com/$VERSION/chromedriver_linux64.zip; \
+    unzip chromedriver_linux64.zip; \
+    mv chromedriver /usr/bin/chromedriver
+EXPOSE 9515
