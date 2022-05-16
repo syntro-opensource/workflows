@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version:
+        php_version:
           - '7.4'
     steps:
       -
@@ -52,7 +52,7 @@ jobs:
         with:
           context: container/silverstripe-dev
           build-args: |
-            PHP_VERSION="${{ php-version }}"
+            PHP_VERSION="${{ matrix.php_version }}"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
