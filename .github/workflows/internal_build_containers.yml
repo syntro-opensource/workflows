@@ -50,8 +50,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: container/silverstripe-dev
-          build-args: |
-            PHP_VERSION="${{ php-version }}"
+          build-args:
+            - PHP_VERSION="${{ php-version }}"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
