@@ -16,6 +16,8 @@ jobs:
       matrix:
         php_version:
           - '7.4'
+          - '8.0'
+          - '8.1'
     steps:
       -
         name: Checkout
@@ -40,4 +42,4 @@ jobs:
           build-args: |
             PHP_VERSION=${{ matrix.php_version }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster
