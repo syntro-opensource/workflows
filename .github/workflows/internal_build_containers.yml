@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - container/**
+      - .github/workflows/internal_build_containers.yml
 
 jobs:
   silverstripe:
