@@ -28,8 +28,8 @@ RUN set -eux; \
 # Configure apache & PHP
 ENV DOCUMENT_ROOT /var/www/html
 ENV APACHE_SERVER_NAME localhost
-COPY container/silverstripe-dev/srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
-COPY container/silverstripe-dev/srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
+COPY srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
+COPY srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
 Run set -eux; \
     a2enmod rewrite expires remoteip headers; \
     \
