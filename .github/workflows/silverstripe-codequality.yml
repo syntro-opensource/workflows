@@ -1,0 +1,23 @@
+name: 🌟 Codequality
+# -----------------------------
+# Codequality suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        required: true
+        type: string
+
+jobs:
+  phpcs:
+    name: 🔮 PHPcs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: lint
+        uses: chindit/actions-phpcs@master
+        with:
+          dir: ${{ inputs.username }}
