@@ -1,6 +1,6 @@
-name: 🌟 Codequality
+name: Suite PHPCS
 # -----------------------------
-# Codequality suite
+# PHPCS suite
 # -----------------------------
 
 on:
@@ -20,4 +20,4 @@ jobs:
       - name: lint
         uses: chindit/actions-phpcs@master
         with:
-          dir: ${{ inputs.username }}
+          dir: ${{ inputs.dir }}
