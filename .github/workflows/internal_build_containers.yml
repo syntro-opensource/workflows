@@ -21,20 +21,6 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev-apache
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       -
@@ -52,7 +38,6 @@ jobs:
         with:
           context: container/silverstripe-dev
           build-args: |
-            PHP_VERSION="${{ matrix.php_version }}"
+            PHP_VERSION=${{ matrix.php_version }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache
