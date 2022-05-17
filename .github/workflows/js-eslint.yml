@@ -1,0 +1,50 @@
+name: Suite ESLint
+# -----------------------------
+# ESLint suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        required: true
+        type: string
+      configfile:
+        type: string
+        default: .eslintrc
+      ext:
+        type: string
+        default: js,jsx
+      max-warnings:
+        type: number
+        default: 0
+
+jobs:
+  eslint:
+    name: 🔮 ESLint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - name: Cache Node dependencies
+      uses: actions/cache@v3.0.1
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: npm install
+    - name: Lint code
+      run: |
+        npx eslint \
+          -c ${{ inputs.configfile }} \
+          --ext="${{ inputs.ext }}" \
+          --max-warnings="${{ inputs.max-warnings }}" \
+          ${{ inputs.dir }}
