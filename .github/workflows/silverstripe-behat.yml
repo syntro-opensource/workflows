@@ -6,9 +6,6 @@ name: Suite Behat
 on:
   workflow_call:
     inputs:
-      dir:
-        required: true
-        type: string
       php_version:
         default: '7.4'
         type: string
