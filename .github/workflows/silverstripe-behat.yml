@@ -1,0 +1,70 @@
+name: Suite Behat
+# -----------------------------
+# Behat suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        required: true
+        type: string
+      php_version:
+        default: '7.4'
+        type: string
+
+
+jobs:
+  behat:
+    name: 🐝 Behat
+    runs-on: ubuntu-latest
+    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster-chromedriver
+    services:
+      database:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    env:
+      SS_BASE_URL: http://localhost:80
+      SS_DATABASE_SERVER: database
+      SS_DATABASE_NAME: ss_default_${{ inputs.php_version }}
+      SS_DATABASE_USERNAME: root
+      SS_DATABASE_PASSWORD: ''
+      DOCUMENT_ROOT: ${{ github.workspace }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Composer Cache Directory
+        id: composer-data
+        run: |
+          echo "::set-output name=dir::$(composer config --global data-dir)"
+      - name: Cache Composer Cache and dependencies
+        uses: actions/cache@v3.0.1
+        with:
+          path: |
+            ${{ steps.composer-data.outputs.dir }}
+            **/vendors
+          key: ${{ runner.os }}-composer-${{ inputs.php_version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ inputs.php_version }}-
+      - name: Install Dependencies
+        run: composer install
+      - name: start apache
+        run: |
+          set -eux; \
+          mkdir public/assets; \
+          chmod ugo+rw -R .; \
+          apache2-foreground &> apache.log 2> apache-error.log; \
+          chromedriver &> chromedriver.log 2> chromedriver-error.log
+      - name: Run Behat
+        run: vendor/bin/behat
+      - name: Archive code coverage results
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: behat-results
+          path: artifacts/*
+          retention-days: 1
