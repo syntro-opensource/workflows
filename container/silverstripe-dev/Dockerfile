@@ -1,10 +1,13 @@
 ARG PHP_VERSION
-From php:${PHP_VERSION}-apache-buster
+From php:${PHP_VERSION}-apache-buster as devenv
 ENV DEBIAN_FRONTEND=noninteractive
 
 # ----------------------
 #   Silverstripe
 # ----------------------
+# Configure apache & PHP
+ENV DOCUMENT_ROOT /var/www/html
+ENV APACHE_SERVER_NAME localhost
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
 RUN set -eux; \
     install-php-extensions \
@@ -24,13 +27,7 @@ RUN set -eux; \
         opcache; \
     \
     docker-php-ext-configure opcache --enable-opcache; \
-    docker-php-ext-install opcache
-# Configure apache & PHP
-ENV DOCUMENT_ROOT /var/www/html
-ENV APACHE_SERVER_NAME localhost
-COPY srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
-COPY srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
-Run set -eux; \
+    docker-php-ext-install opcache; \
     a2enmod rewrite expires remoteip headers; \
     \
     echo 'date.timezone = Europe/Zurich' > "$PHP_INI_DIR/conf.d/timezone.ini"; \
@@ -38,6 +35,8 @@ Run set -eux; \
         echo 'log_errors = On'; \
         echo 'error_log = /dev/stderr'; \
     } > "$PHP_INI_DIR/conf.d/errors.ini"
+COPY srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
+COPY srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
 
 # ----------------------
 #   Composer
@@ -51,6 +50,7 @@ COPY --from="composer" /usr/bin/composer /usr/bin/composer
 # ----------------------
 #   Chromedriver
 # ----------------------
+FROM devenv as devenv-cdr
 RUN set -eux; \
     apt update -qq; \
     apt install wget unzip libnss3 gnupg -yqq; \

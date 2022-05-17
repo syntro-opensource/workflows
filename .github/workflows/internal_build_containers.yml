@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push devenv
         uses: docker/build-push-action@v3
         with:
           context: container/silverstripe-dev
@@ -43,3 +43,14 @@ jobs:
             PHP_VERSION=${{ matrix.php_version }}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster
+          target: devenv
+      -
+        name: Build and push devenv with cdr
+        uses: docker/build-push-action@v3
+        with:
+          context: container/silverstripe-dev
+          build-args: |
+            PHP_VERSION=${{ matrix.php_version }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster-chromedriver
+          target: devenv-cdr
