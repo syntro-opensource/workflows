@@ -25,6 +25,7 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     env:
+      SS_ENVIRONMENT_TYPE: "dev"
       SS_BASE_URL: http://localhost:80
       SS_DATABASE_SERVER: database
       SS_DATABASE_NAME: ss_default_${{ inputs.php_version }}
