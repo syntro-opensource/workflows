@@ -1,0 +1,60 @@
+name: Suite PHPUnit
+# -----------------------------
+# PHPUnit suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      suite:
+        required: true
+        type: string
+      config_file:
+        default: 'phpunit.xml'
+        type: string
+      php_version:
+        default: '7.4'
+        type: string
+
+
+jobs:
+  phpunit:
+    name: 🧩 PHPUnit
+    runs-on: ubuntu-latest
+    container: yntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster
+    services:
+      database:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    env:
+      SS_DEFAULT_ADMIN_USERNAME: admin
+      SS_DEFAULT_ADMIN_PASSWORD: admin
+      SS_DATABASE_SERVER: database
+      SS_DATABASE_NAME: ss_default_${{ inputs.php_version }}
+      SS_DATABASE_USERNAME: root
+      SS_DATABASE_PASSWORD: ''
+      SS_ENVIRONMENT_TYPE: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Composer Cache Directory
+        id: composer-data
+        run: |
+          echo "::set-output name=dir::$(composer config --global data-dir)"
+      - name: Cache Composer Cache
+        uses: actions/cache@v3.0.1
+        with:
+          path: |
+            ${{ steps.composer-data.outputs.dir }}
+            **/vendors
+          key: ${{ runner.os }}-composer-${{ inputs.php_version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ inputs.php_version }}-
+      - name: Install Dependencies
+        run: composer install
+      - name: run phpunit
+        run: vendor/bin/phpunit -c "${{ inputs.config_file }}" ${{ inputs.suite }}
