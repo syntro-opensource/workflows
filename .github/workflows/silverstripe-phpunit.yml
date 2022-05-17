@@ -31,7 +31,6 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     env:
-      SS_ENVIRONMENT_TYPE: "dev"
       SS_DEFAULT_ADMIN_USERNAME: admin
       SS_DEFAULT_ADMIN_PASSWORD: admin
       SS_DATABASE_SERVER: database
