@@ -34,7 +34,7 @@ jobs:
       SS_DEFAULT_ADMIN_USERNAME: admin
       SS_DEFAULT_ADMIN_PASSWORD: admin
       SS_DATABASE_SERVER: database
-      SS_DATABASE_NAME: ss_default_${{ inputs.php_version }}
+      SS_DATABASE_NAME: ss_default
       SS_DATABASE_USERNAME: root
       SS_DATABASE_PASSWORD: ''
       SS_ENVIRONMENT_TYPE: dev
