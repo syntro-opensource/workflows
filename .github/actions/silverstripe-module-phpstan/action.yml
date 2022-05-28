@@ -1,0 +1,35 @@
+name: silverstripe-module-phpstan
+description: preps and runs PHPStan for a silverstripe module
+inputs:
+  dir:
+    description: where to execute phpstan
+    required: true
+  php_version:
+    description: the php version to use for the check
+    default: '7.4'
+  silverstripe_version:
+    description: the version to test the module with
+    default: '4.10'
+  phpstan_binary:
+    description: where to find the phpstan binary
+    default: 'vendor/bin/phpstan'
+  phpstan_config:
+    description: where to find the phpstan config
+    default: 'phpstan.neon'
+  phpstan_bootstrap:
+    description: where to find the bootstrap file
+    default: 'vendor/syntro/silverstripe-phpstan/bootstrap.php'
+  phpstan_level:
+    description: what level to use for analysis
+    default: '4'
+runs:
+  using: composite
+  steps:
+    - name: install dependencies
+      uses: docker://syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster
+      run: |
+        composer require --no-update silverstripe/recipe-cms:${{ inputs.silverstripe_version }} &&\
+        composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+    - name: run phpstan
+      uses: docker://syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster
+      run: ${{ inputs.phpstan_binary }} analyse ${{ inputs.dir }} -c "${{ inputs.phpstan_config }}" -a ${{ inputs.phpstan_bootstrap }} --level ${{ inputs.phpstan_level }}
