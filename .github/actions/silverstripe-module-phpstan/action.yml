@@ -23,8 +23,10 @@ runs:
   using: composite
   steps:
     - name: install dependencies
+      shell: bash
       run: |
         composer require --no-update silverstripe/recipe-cms:${{ inputs.silverstripe_version }} &&\
         composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
     - name: run phpstan
+      shell: bash
       run: ${{ inputs.phpstan_binary }} analyse ${{ inputs.dir }} -c "${{ inputs.phpstan_config }}" -a ${{ inputs.phpstan_bootstrap }} --level ${{ inputs.phpstan_level }}
