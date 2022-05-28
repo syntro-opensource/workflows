@@ -1,0 +1,14 @@
+name: silverstripe-module-prep
+description: preps a silverstripe module for being tested
+inputs:
+  silverstripe_version:
+    description: the version to prep the module with
+    default: '4.10'
+runs:
+  using: composite
+  steps:
+    - name: install dependencies
+      shell: bash
+      run: |
+        composer require --no-update silverstripe/recipe-cms:${{ inputs.silverstripe_version }} &&\
+        composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile

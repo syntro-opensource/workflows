@@ -4,9 +4,6 @@ inputs:
   dir:
     description: where to execute phpstan
     required: true
-  silverstripe_version:
-    description: the version to test the module with
-    default: '4.10'
   phpstan_binary:
     description: where to find the phpstan binary
     default: 'vendor/bin/phpstan'
@@ -22,11 +19,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: install dependencies
-      shell: bash
-      run: |
-        composer require --no-update silverstripe/recipe-cms:${{ inputs.silverstripe_version }} &&\
-        composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
     - name: run phpstan
       shell: bash
       run: ${{ inputs.phpstan_binary }} analyse ${{ inputs.dir }} -c "${{ inputs.phpstan_config }}" -a ${{ inputs.phpstan_bootstrap }} --level ${{ inputs.phpstan_level }}
