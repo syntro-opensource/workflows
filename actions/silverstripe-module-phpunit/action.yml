@@ -1,0 +1,45 @@
+name: silverstripe-module-phpunit
+description: preps and runs PHPStan for a silverstripe module
+inputs:
+  dir:
+    description: where to execute phpunit
+    required: true
+  coverage:
+    description: if true, generates coverage and sends it to codecov
+    default: false
+  phpunit_binary:
+    description: where to find the phpunit binary
+    default: 'vendor/bin/phpunit'
+  phpunit_config:
+    description: where to find the phpunit config
+    default: 'phpunit.xml'
+  phpunit_database:
+    description: location of the database (defaults to 'database')
+    default: databsae
+  phpunit_database_username:
+    description: username of the database service (defaults to 'root')
+    default: root
+  phpunit_database_password:
+    description: password of the database service (defaults to an empty string)
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: run phpunit
+      env:
+        SS_DEFAULT_ADMIN_USERNAME: admin
+        SS_DEFAULT_ADMIN_PASSWORD: admin
+        SS_DATABASE_SERVER: ${{ inputs.phpunit_database }}
+        SS_DATABASE_NAME: ss_default_${{ github.run_id }}_${{ github.job }}
+        SS_DATABASE_USERNAME: ${{ inputs.phpunit_database_username }}
+        SS_DATABASE_PASSWORD: ${{ inputs.phpunit_database_password }}
+        SS_ENVIRONMENT_TYPE: dev
+      run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
+    - name: generate coverage
+      run: phpdbg -qrr ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
+      if: ${{ inputs.coverage }}
+    - name: submit coverage
+      uses: codecov/codecov-action@v2
+      with:
+        files: ./coverage.xml
+      if: ${{ inputs.coverage }}
