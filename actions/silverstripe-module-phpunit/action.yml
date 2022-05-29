@@ -26,6 +26,7 @@ runs:
   using: composite
   steps:
     - name: run phpunit
+      shell: bash
       env:
         SS_DEFAULT_ADMIN_USERNAME: admin
         SS_DEFAULT_ADMIN_PASSWORD: admin
@@ -36,6 +37,7 @@ runs:
         SS_ENVIRONMENT_TYPE: dev
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
     - name: generate coverage
+      shell: bash
       run: phpdbg -qrr ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
       if: ${{ inputs.coverage }}
     - name: submit coverage
