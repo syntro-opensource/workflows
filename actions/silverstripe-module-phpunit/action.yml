@@ -15,7 +15,7 @@ inputs:
     default: 'phpunit.xml'
   phpunit_database:
     description: location of the database (defaults to 'database')
-    default: databsae
+    default: database
   phpunit_database_username:
     description: username of the database service (defaults to 'root')
     default: root
