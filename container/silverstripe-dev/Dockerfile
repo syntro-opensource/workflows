@@ -43,7 +43,7 @@ COPY srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
 # ----------------------
 RUN set -eux; \
     apt-get update -qq; \
-    apt-get install git vim -yqq; \
+    apt-get install git vim unzip -yqq; \
     rm -rf /var/lib/apt/lists/*
 COPY --from="composer" /usr/bin/composer /usr/bin/composer
 
