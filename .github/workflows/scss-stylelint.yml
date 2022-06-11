@@ -1,0 +1,42 @@
+name: Suite StyleLint
+# -----------------------------
+# StyleLint suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      glob:
+        required: true
+        type: string
+      max-warnings:
+        type: number
+        default: 0
+
+jobs:
+  eslint:
+    name: 🔮 StyleLint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - name: Cache Node dependencies
+      uses: actions/cache@v3.0.1
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: npm install
+    - name: Lint code
+      run: |
+        npx stylelint \
+          --max-warnings="${{ inputs.max-warnings }}" \
+          ${{ inputs.glob }}
