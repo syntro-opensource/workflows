@@ -38,7 +38,7 @@ runs:
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
     - name: generate coverage
       shell: bash
-      run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
+      run: phpdbg -qrr ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
       if: ${{ inputs.coverage == 'true' }}
     - name: submit coverage
       uses: codecov/codecov-action@v2
