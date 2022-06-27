@@ -36,9 +36,20 @@ runs:
         SS_DATABASE_PASSWORD: ${{ inputs.phpunit_database_password }}
         SS_ENVIRONMENT_TYPE: dev
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
+    # - name: install coverage driver
+    #   shell: bash
+    #   run: apt-get update -yqq && apt-get install php-phpdbg
     - name: generate coverage
       shell: bash
-      run: phpdbg -qrr ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
+      env:
+        SS_DEFAULT_ADMIN_USERNAME: admin
+        SS_DEFAULT_ADMIN_PASSWORD: admin
+        SS_DATABASE_SERVER: ${{ inputs.phpunit_database }}
+        SS_DATABASE_NAME: ss_default_${{ github.run_id }}_${{ github.job }}
+        SS_DATABASE_USERNAME: ${{ inputs.phpunit_database_username }}
+        SS_DATABASE_PASSWORD: ${{ inputs.phpunit_database_password }}
+        SS_ENVIRONMENT_TYPE: dev
+      run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
       if: ${{ inputs.coverage == 'true' }}
     - name: submit coverage
       uses: codecov/codecov-action@v2
