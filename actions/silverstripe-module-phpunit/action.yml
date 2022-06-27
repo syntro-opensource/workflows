@@ -38,7 +38,7 @@ runs:
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
     - name: install coverage driver
       shell: bash
-      run: pecl install xdebug && docker-php-ext-enable xdebug && export XDEBUG_MODE=coverage
+      run: pecl install xdebug && docker-php-ext-enable xdebug
       if: ${{ inputs.coverage == 'true' }}
     - name: generate coverage
       shell: bash
@@ -50,6 +50,7 @@ runs:
         SS_DATABASE_USERNAME: ${{ inputs.phpunit_database_username }}
         SS_DATABASE_PASSWORD: ${{ inputs.phpunit_database_password }}
         SS_ENVIRONMENT_TYPE: dev
+        XDEBUG_MODE: coverage
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" -dmemory_limit=512M --coverage-clover=coverage.xml ${{ inputs.dir }}
       if: ${{ inputs.coverage == 'true' }}
     - name: submit coverage
