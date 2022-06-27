@@ -38,7 +38,7 @@ runs:
       run: ${{ inputs.phpunit_binary }} -c "${{ inputs.phpunit_config }}" ${{ inputs.dir }}
     - name: install coverage driver
       shell: bash
-      run: pecl install xdebug && docker-php-ext-enable xdebug
+      run: pecl install xdebug && docker-php-ext-enable xdebug && export XDEBUG_MODE=coverage
       if: ${{ inputs.coverage == 'true' }}
     - name: generate coverage
       shell: bash
