@@ -1,0 +1,99 @@
+name: Silverstripe Suite
+# -----------------------------
+# Silverstripe suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      # -----------------------------
+      # configure eslint
+      # -----------------------------
+      eslint:
+        description: runs the eslint check
+        type: boolean
+        default: false
+      eslint_dir:
+        required: true
+        type: string
+      eslint_configfile:
+        type: string
+        default: .eslintrc
+      eslint_ext:
+        type: string
+        default: js,jsx
+      eslint_max-warnings:
+        type: number
+        default: 0
+      # -----------------------------
+      # configure stylelint
+      # -----------------------------
+      stylelint:
+        description: runs the stylelint check
+        type: boolean
+        default: false
+      stylelint_glob:
+        required: true
+        type: string
+      stylelint_max-warnings:
+        type: number
+        default: 0
+
+
+jobs:
+  eslint:
+    if: ${{ inputs.eslint }}
+    name: 🔧 ESLint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - name: Cache Node dependencies
+      uses: actions/cache@v3.0.1
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: npm install
+    - name: Lint code
+      run: |
+        npx eslint \
+          -c ${{ inputs.eslint_configfile }} \
+          --ext="${{ inputs.eslint_ext }}" \
+          --max-warnings="${{ inputs.eslint_max-warnings }}" \
+          ${{ inputs.eslint_dir }}
+  stylelint:
+    if: ${{ inputs.stylelint }}
+    name: 🖼 StyleLint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - name: Cache Node dependencies
+      uses: actions/cache@v3.0.1
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: npm install
+    - name: Lint code
+      run: |
+        npx stylelint \
+          --max-warnings="${{ inputs.stylelint_max-warnings }}" \
+          ${{ inputs.stylelint_glob }}
