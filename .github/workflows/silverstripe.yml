@@ -1,0 +1,197 @@
+name: Silverstripe Suite
+# -----------------------------
+# Silverstripe suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      # -----------------------------
+      # configure phpunit
+      # -----------------------------
+      phpunit:
+        description: runs the phpunit test
+        type: boolean
+        default: false
+      phpunit_suite:
+        required: true
+        type: string
+      phpunit_config_file:
+        default: 'phpunit.xml'
+        type: string
+      phpunit_php_version:
+        default: '7.4'
+        type: string
+      # -----------------------------
+      # configure phpstan
+      # -----------------------------
+      phpstan:
+        description: runs the phpstan test
+        type: boolean
+        default: false
+      phpstan_dir:
+        required: true
+        type: string
+      phpstan_php_version:
+        default: '7.4'
+        type: string
+      # -----------------------------
+      # configure phpcs
+      # -----------------------------
+      phpcs:
+        description: runs the phpcs test
+        type: boolean
+        default: false
+      phpcs_dir:
+        required: true
+        type: string
+      # -----------------------------
+      # configure behat
+      # -----------------------------
+      behat:
+        description: runs the behat test
+        type: boolean
+        default: false
+      behat_php_version:
+        default: '7.4'
+        type: string
+
+jobs:
+  phpunit:
+    if: ${{ inputs.phpunit }}
+    name: 🧩 PHPUnit
+    runs-on: ubuntu-latest
+    container: syntrocontainer/silverstripe-dev:${{ inputs.phpunit_php_version }}-apache-buster
+    services:
+      database:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    env:
+      SS_DEFAULT_ADMIN_USERNAME: admin
+      SS_DEFAULT_ADMIN_PASSWORD: admin
+      SS_DATABASE_SERVER: database
+      SS_DATABASE_NAME: ss_default
+      SS_DATABASE_USERNAME: root
+      SS_DATABASE_PASSWORD: ''
+      SS_ENVIRONMENT_TYPE: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Composer Cache Directory
+        id: composer-data
+        run: |
+          echo "::set-output name=dir::$(composer config --global data-dir)"
+      - name: Cache Composer Cache
+        uses: actions/cache@v3.0.1
+        with:
+          path: |
+            ${{ steps.composer-data.outputs.dir }}
+            **/vendors
+          key: ${{ runner.os }}-composer-${{ inputs.phpunit_php_version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ inputs.phpunit_php_version }}-
+      - name: Install Dependencies
+        run: composer install
+      - name: run phpunit
+        run: vendor/bin/phpunit -c "${{ inputs.phpunit_config_file }}" ${{ inputs.phpunit_suite }}
+  phpstan:
+    if: ${{ inputs.phpstan }}
+    name: 🔺 PHPStan
+    runs-on: ubuntu-latest
+    container: syntrocontainer/silverstripe-dev:${{ inputs.phpstan_php_version }}-apache-buster
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Composer Cache Directory
+        id: composer-data
+        run: |
+          echo "::set-output name=dir::$(composer config --global data-dir)"
+      - name: Cache Composer Cache and dependencies
+        uses: actions/cache@v3.0.1
+        with:
+          path: |
+            ${{ steps.composer-data.outputs.dir }}
+            **/vendors
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer
+      - name: Install Dependencies
+        run: composer install
+      - name: Run PHPStan
+        run:  |
+          vendor/bin/phpstan analyse ${{ inputs.phpstan_dir }} \
+            --memory-limit=1G \
+            -c phpstan.neon \
+            -a vendor/syntro/silverstripe-phpstan/bootstrap.php \
+            --no-ansi \
+            --level 4
+  phpcs:
+    if: ${{ inputs.phpcs }}
+    name: 🔮 PHPcs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: lint
+        uses: chindit/actions-phpcs@master
+        with:
+          dir: ${{ inputs.phpcs_dir }}
+  behat:
+    if: ${{ inputs.behat }}
+    name: 🐝 Behat
+    runs-on: ubuntu-latest
+    container: syntrocontainer/silverstripe-dev:${{ inputs.behat_php_version }}-apache-buster-chromedriver
+    services:
+      database:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    env:
+      SS_ENVIRONMENT_TYPE: "dev"
+      SS_BASE_URL: http://localhost:80
+      SS_DATABASE_SERVER: database
+      SS_DATABASE_NAME: ss_default_${{ inputs.behat_php_version }}
+      SS_DATABASE_USERNAME: root
+      SS_DATABASE_PASSWORD: ''
+      DOCUMENT_ROOT: ${{ github.workspace }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Composer Cache Directory
+        id: composer-data
+        run: |
+          echo "::set-output name=dir::$(composer config --global data-dir)"
+      - name: Cache Composer Cache and dependencies
+        uses: actions/cache@v3.0.1
+        with:
+          path: |
+            ${{ steps.composer-data.outputs.dir }}
+            **/vendors
+          key: ${{ runner.os }}-composer-${{ inputs.behat_php_version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ inputs.behat_php_version }}-
+      - name: Install Dependencies
+        run: composer install
+      - name: start apache
+        run: |
+          set -eux; \
+          mkdir public/assets; \
+          chmod ugo+rw -R .; \
+          apache2-foreground &> apache.log 2> apache-error.log; \
+          chromedriver &> chromedriver.log 2> chromedriver-error.log
+      - name: Run Behat
+        run: vendor/bin/behat
+      - name: Archive code coverage results
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: behat-results
+          path: artifacts/*
+          retention-days: 1
