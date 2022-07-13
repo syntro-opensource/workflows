@@ -187,7 +187,7 @@ jobs:
           apache2-foreground &> apache.log 2> apache-error.log; \
           chromedriver &> chromedriver.log 2> chromedriver-error.log
       - name: Run Behat
-        run: vendor/bin/behat
+        run: vendor/bin/behat --strict
       - name: Archive code coverage results
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
