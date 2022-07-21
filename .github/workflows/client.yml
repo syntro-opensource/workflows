@@ -14,7 +14,7 @@ on:
         type: boolean
         default: false
       eslint_dir:
-        required: true
+        # required: true
         type: string
       eslint_configfile:
         type: string
@@ -33,7 +33,7 @@ on:
         type: boolean
         default: false
       stylelint_glob:
-        required: true
+        # required: true
         type: string
       stylelint_max-warnings:
         type: number
