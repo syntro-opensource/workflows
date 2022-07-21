@@ -1,0 +1,73 @@
+name: Silverstripe Module Suite
+# -----------------------------
+# Silverstripe module suite
+# -----------------------------
+
+on:
+  workflow_call:
+  inputs:
+    # -----------------------------
+    # configure phpunit
+    # -----------------------------
+    phpunit:
+      description: runs the phpunit test
+      type: boolean
+      default: false
+    # -----------------------------
+    # configure phpstan
+    # -----------------------------
+    phpstan:
+      description: runs the phpstan test
+      type: boolean
+      default: false
+    # -----------------------------
+    # configure phpcs
+    # -----------------------------
+    phpcs:
+      description: runs the phpcs test
+      type: boolean
+      default: false
+    # -----------------------------
+    # configure behat
+    # -----------------------------
+    behat:
+      description: runs the behat test
+      type: boolean
+      default: false
+jobs:
+  phpunit:
+    if: ${{ inputs.phpunit }}
+    name: 🧩 PHPUnit
+    strategy:
+      matrix:
+        php_version: [ '7.4', '8.0', '8.1' ]
+        silverstripe_version: [ '4.9', '4.10', '4.11' ]
+        exclude:
+          - php_version: '8.0'
+            silverstripe_version: '4.9'
+          - php_version: '8.1'
+            silverstripe_version: '4.9'
+          - php_version: '8.1'
+            silverstripe_version: '4.10'
+    container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Prep Module
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        with:
+          silverstripe_version: ${{ matrix.silverstripe_version }}
+      - name: Run PHPUnit
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@master
+        with:
+          dir: tests/
+          coverage: ${{ matrix.php_version == '7.4' }}
