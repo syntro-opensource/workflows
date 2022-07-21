@@ -5,35 +5,35 @@ name: Silverstripe Module Suite
 
 on:
   workflow_call:
-  inputs:
-    # -----------------------------
-    # configure phpunit
-    # -----------------------------
-    phpunit:
-      description: runs the phpunit test
-      type: boolean
-      default: false
-    # -----------------------------
-    # configure phpstan
-    # -----------------------------
-    phpstan:
-      description: runs the phpstan test
-      type: boolean
-      default: false
-    # -----------------------------
-    # configure phpcs
-    # -----------------------------
-    phpcs:
-      description: runs the phpcs test
-      type: boolean
-      default: false
-    # -----------------------------
-    # configure behat
-    # -----------------------------
-    behat:
-      description: runs the behat test
-      type: boolean
-      default: false
+    inputs:
+      # -----------------------------
+      # configure phpunit
+      # -----------------------------
+      phpunit:
+        description: runs the phpunit test
+        type: boolean
+        default: false
+      # -----------------------------
+      # configure phpstan
+      # -----------------------------
+      phpstan:
+        description: runs the phpstan test
+        type: boolean
+        default: false
+      # -----------------------------
+      # configure phpcs
+      # -----------------------------
+      phpcs:
+        description: runs the phpcs test
+        type: boolean
+        default: false
+      # -----------------------------
+      # configure behat
+      # -----------------------------
+      behat:
+        description: runs the behat test
+        type: boolean
+        default: false
 jobs:
   phpunit:
     if: ${{ inputs.phpunit }}
