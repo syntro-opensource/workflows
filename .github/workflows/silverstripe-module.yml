@@ -23,6 +23,10 @@ on:
         description: runs the phpstan test
         type: boolean
         default: false
+      phpstan_config:
+        description: where to find the phpstan config
+        type: string
+        default: 'phpstan.neon'
       phpstan_bootstrap:
         description: the location of the bootstrap file
         type: string
@@ -101,6 +105,7 @@ jobs:
       - name: Run PHPStan
         uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
         with:
+          phpstan_config: ${{ inputs.phpstan_config }}
           phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
           dir: src/
   phpcs:
