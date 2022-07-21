@@ -41,12 +41,8 @@ jobs:
     strategy:
       matrix:
         php_version: [ '7.4', '8.0', '8.1' ]
-        silverstripe_version: [ '4.9', '4.10', '4.11' ]
+        silverstripe_version: [ '4.10', '4.11' ]
         exclude:
-          - php_version: '8.0'
-            silverstripe_version: '4.9'
-          - php_version: '8.1'
-            silverstripe_version: '4.9'
           - php_version: '8.1'
             silverstripe_version: '4.10'
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
