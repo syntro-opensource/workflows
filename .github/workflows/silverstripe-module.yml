@@ -13,6 +13,9 @@ on:
         description: runs the phpunit test
         type: boolean
         default: false
+      phpunit_config_file:
+        default: 'phpunit.xml'
+        type: string
       # -----------------------------
       # configure phpstan
       # -----------------------------
@@ -69,6 +72,7 @@ jobs:
       - name: Run PHPUnit
         uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@master
         with:
+          phpunit_config: ${{ inputs.phpunit_config_file }}
           dir: tests/
           coverage: ${{ matrix.php_version == '7.4' }}
   phpstan:
