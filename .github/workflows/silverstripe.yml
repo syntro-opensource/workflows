@@ -22,6 +22,9 @@ on:
       phpunit_php_version:
         default: '7.4'
         type: string
+      phpunit_build_graphql:
+        default: false
+        type: boolean
       # -----------------------------
       # configure phpstan
       # -----------------------------
@@ -96,6 +99,9 @@ jobs:
             ${{ runner.os }}-composer-${{ inputs.phpunit_php_version }}-
       - name: Install Dependencies
         run: composer install
+      - name: build graphql schema
+        run: vendor/bin/sake /dev/graphql/build
+        if: ${{ inputs.phpunit_build_graphql }}
       - name: run phpunit
         run: vendor/bin/phpunit -c "${{ inputs.phpunit_config_file }}" ${{ inputs.phpunit_suite }}
   phpstan:

@@ -27,6 +27,7 @@ jobs:
       phpunit_suite: app/tests/
       # phpunit_config_file:
       # phpunit_php_version: '8.1'
+      # phpunit_build_graphql: false
       phpstan: true
       phpstan_dir: app/src/
       # phpstan_php_version: '8.1'
