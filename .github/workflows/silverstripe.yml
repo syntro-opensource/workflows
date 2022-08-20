@@ -22,6 +22,9 @@ on:
       phpunit_php_version:
         default: '7.4'
         type: string
+      phpunit_flush:
+        default: false
+        type: boolean
       phpunit_build_graphql:
         default: false
         type: boolean
@@ -104,6 +107,10 @@ jobs:
         if: ${{ inputs.phpunit_build_graphql }}
       - name: run phpunit
         run: vendor/bin/phpunit -c "${{ inputs.phpunit_config_file }}" ${{ inputs.phpunit_suite }}
+        if: ${{ !inputs.phpunit_flush }}
+      - name: run phpunit with flush
+        run: vendor/bin/phpunit -c "${{ inputs.phpunit_config_file }}" ${{ inputs.phpunit_suite }} flush=1
+        if: ${{ inputs.phpunit_flush }}
   phpstan:
     if: ${{ inputs.phpstan }}
     name: 🔺 PHPStan
