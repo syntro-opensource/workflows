@@ -54,7 +54,7 @@ jobs:
           context: container/silverstripe-dev
           build-args: |
             PHP_VERSION=${{ matrix.php_version }}
-          platforms: linux/amd64,linux/arm64
+          # platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster-chromedriver
           target: devenv-cdr
