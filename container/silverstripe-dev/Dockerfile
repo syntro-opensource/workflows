@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-From php:${PHP_VERSION}-apache-buster as devenv
+FROM php:${PHP_VERSION}-apache-buster as devenv
 ENV DEBIAN_FRONTEND=noninteractive
 
 # ----------------------
@@ -36,6 +36,7 @@ RUN set -eux; \
         echo 'error_log = /dev/stderr'; \
     } > "$PHP_INI_DIR/conf.d/errors.ini"
 COPY srv_conf/opcache.ini $PHP_INI_DIR/conf.d/
+COPY srv_conf/memory.ini $PHP_INI_DIR/conf.d/
 COPY srv_conf/000-default.conf $APACHE_CONFDIR/sites-available/
 
 # ----------------------
@@ -45,7 +46,7 @@ RUN set -eux; \
     apt-get update -qq; \
     apt-get install git vim unzip -yqq; \
     rm -rf /var/lib/apt/lists/*
-COPY --from="composer" /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # ----------------------
 #   Chromedriver
