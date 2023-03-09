@@ -1,5 +1,5 @@
 name: silverstripe-module-phpunit
-description: preps and runs PHPStan for a silverstripe module
+description: preps and runs PHPStan for a silverstripe module. Should only be run for PHP versions >= 8
 inputs:
   dir:
     description: where to execute phpunit
