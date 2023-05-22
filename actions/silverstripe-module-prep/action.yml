@@ -3,7 +3,7 @@ description: preps a silverstripe module for being tested
 inputs:
   silverstripe_version:
     description: the version to prep the module with
-    default: '4.10'
+    default: '5.0'
 runs:
   using: composite
   steps:

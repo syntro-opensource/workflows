@@ -20,7 +20,7 @@ on:
         default: 'phpunit.xml'
         type: string
       phpunit_php_version:
-        default: '7.4'
+        default: '8.1'
         type: string
       phpunit_flush:
         default: false
@@ -39,7 +39,7 @@ on:
         required: true
         type: string
       phpstan_php_version:
-        default: '7.4'
+        default: '8.1'
         type: string
       # -----------------------------
       # configure phpcs
@@ -59,7 +59,7 @@ on:
         type: boolean
         default: false
       behat_php_version:
-        default: '7.4'
+        default: '8.1'
         type: string
 
 jobs:

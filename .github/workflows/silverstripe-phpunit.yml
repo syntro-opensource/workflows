@@ -13,7 +13,7 @@ on:
         default: 'phpunit.xml'
         type: string
       php_version:
-        default: '7.4'
+        default: '8.1'
         type: string
 
 

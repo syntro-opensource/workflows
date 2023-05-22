@@ -1,4 +1,4 @@
-name: Silverstripe Module Suite
+name: Silverstripe Module Suite v5
 # -----------------------------
 # Silverstripe module suite
 # -----------------------------
@@ -52,8 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: [ '7.4', '8.0', '8.1' ]
-        silverstripe_version: [ '4.12', '4.13' ]
+        php_version: [ '8.1' ]
+        silverstripe_version: [ '5.0' ]
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
     services:
       database:
@@ -67,33 +67,33 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Prep Module
-        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
         with:
           silverstripe_version: ${{ matrix.silverstripe_version }}
       - name: Run PHPUnit
-        uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@master
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@5
         with:
           phpunit_config: ${{ inputs.phpunit_config_file }}
           dir: tests/
-          coverage: ${{ matrix.php_version == '8.1' && matrix.silverstripe_version == '4.13' }}
+          coverage: ${{ matrix.php_version == '8.1' && matrix.silverstripe_version == '5.0' }}
   phpstan:
     if: ${{ inputs.phpstan }}
     name: 🔺 PHPStan
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: [ '7.4', '8.0', '8.1' ]
-        silverstripe_version: [ '4.12', '4.13' ]
+        php_version: [ '8.1' ]
+        silverstripe_version: [ '5.0' ]
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Prep Module
-        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
         with:
           silverstripe_version: ${{ matrix.silverstripe_version }}
       - name: Run PHPStan
-        uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@5
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
           phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
@@ -106,7 +106,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: lint
-        uses: chindit/actions-phpcs@master
+        uses: chindit/actions-phpcs@5
         with:
           dir: src/
   # behat:
@@ -115,15 +115,8 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       php_version: [ '7.4', '8.0', '8.1' ]
-  #       silverstripe_version: [ '4.9', '4.10', '4.11' ]
-  #       exclude:
-  #         - php_version: '8.0'
-  #           silverstripe_version: '4.9'
-  #         - php_version: '8.1'
-  #           silverstripe_version: '4.9'
-  #         - php_version: '8.1'
-  #           silverstripe_version: '4.10'
+  #       php_version: [ '8.1' ]
+  #       silverstripe_version: [ '5.0' ]
   #   container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster-chromedriver
   #   services:
   #     database:
@@ -145,7 +138,7 @@ jobs:
   #     - name: Checkout code
   #       uses: actions/checkout@v3
   #     - name: Prep Module
-  #       uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+  #       uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
   #       with:
   #         silverstripe_version: ${{ matrix.silverstripe_version }}
   #     - name: start apache
