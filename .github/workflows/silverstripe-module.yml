@@ -53,10 +53,7 @@ jobs:
     strategy:
       matrix:
         php_version: [ '7.4', '8.0', '8.1' ]
-        silverstripe_version: [ '4.10', '4.11' ]
-        exclude:
-          - php_version: '8.1'
-            silverstripe_version: '4.10'
+        silverstripe_version: [ '4.12', '4.13' ]
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
     services:
       database:
@@ -78,7 +75,7 @@ jobs:
         with:
           phpunit_config: ${{ inputs.phpunit_config_file }}
           dir: tests/
-          coverage: ${{ matrix.php_version == '8.0' }}
+          coverage: ${{ matrix.php_version == '8.1' && matrix.silverstripe_version == '4.13' }}
   phpstan:
     if: ${{ inputs.phpstan }}
     name: 🔺 PHPStan
@@ -86,14 +83,7 @@ jobs:
     strategy:
       matrix:
         php_version: [ '7.4', '8.0', '8.1' ]
-        silverstripe_version: [ '4.9', '4.10', '4.11' ]
-        exclude:
-          - php_version: '8.0'
-            silverstripe_version: '4.9'
-          - php_version: '8.1'
-            silverstripe_version: '4.9'
-          - php_version: '8.1'
-            silverstripe_version: '4.10'
+        silverstripe_version: [ '4.12', '4.13' ]
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-buster
     steps:
       - name: Checkout Code
