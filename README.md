@@ -21,7 +21,7 @@ Usage is straightforward:
 jobs:
   silverstripe:
     name: 🧰 Silverstripe Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe.yml@4
     with:
       phpunit: true
       phpunit_suite: app/tests/
@@ -38,6 +38,8 @@ jobs:
 ```
 
 Each check can be configured using inputs.
+
+> For Silverstripe 5 related Checks, use the [`5` branch](https://github.com/syntro-opensource/workflows/tree/5).
 
 ## Usage - Silverstripe Modules
 
@@ -60,7 +62,7 @@ Usage is straightforward:
 jobs:
   silverstripe-module:
     name: 🧰 Silverstripe Module Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module.yml@4
     with:
       phpunit: true
       # phpunit_config_file:
@@ -72,6 +74,8 @@ jobs:
 
 
 Each check can be configured using inputs.
+
+> For Silverstripe 5 related Checks, use the [`5` branch](https://github.com/syntro-opensource/workflows/tree/5).
 
 ## Usage - Frontend Checks
 
@@ -87,7 +91,7 @@ Usage is straightforward:
 jobs:
   silverstripe-client:
     name: 📦 Client Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/client.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/client.yml@4
     with:
       eslint: true
       eslint_dir: client/src/seo-field/
@@ -99,3 +103,5 @@ jobs:
       # stylelint_max-warnings:
 ```
 Each check can be configured using inputs.
+
+> For Silverstripe 5 related Checks, use the [`5` branch](https://github.com/syntro-opensource/workflows/tree/5).
