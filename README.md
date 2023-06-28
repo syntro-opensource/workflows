@@ -21,7 +21,7 @@ Usage is straightforward:
 jobs:
   silverstripe:
     name: 🧰 Silverstripe Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe.yml@5
     with:
       phpunit: true
       phpunit_suite: app/tests/
@@ -37,6 +37,8 @@ jobs:
       # behat_php_version: '8.1'
 ```
 
+> For Silverstripe 4 related Checks, use the [`4` branch](https://github.com/syntro-opensource/workflows/tree/4).
+
 Each check can be configured using inputs.
 
 ## Usage - Silverstripe Modules
@@ -45,13 +47,9 @@ This repository provides a testsuite for silverstripe modules. The testsuite
 is used as the standard in our modules and checks Code in a fixed range of
 php and CMS versions:
 
-* PHP 7.4
-* PHP 8.0
 * PHP 8.1
 
-* CMS 4.9
-* CMS 4.10
-* CMS 4.11
+* CMS 5.0
 
 Usage is straightforward:
 
@@ -60,7 +58,7 @@ Usage is straightforward:
 jobs:
   silverstripe-module:
     name: 🧰 Silverstripe Module Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module.yml@5
     with:
       phpunit: true
       # phpunit_config_file:
@@ -72,6 +70,9 @@ jobs:
 
 
 Each check can be configured using inputs.
+
+> For Silverstripe 4 related Checks, use the [`4` branch](https://github.com/syntro-opensource/workflows/tree/4).
+
 
 ## Usage - Frontend Checks
 
@@ -87,7 +88,7 @@ Usage is straightforward:
 jobs:
   silverstripe-client:
     name: 📦 Client Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/client.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/client.yml@5
     with:
       eslint: true
       eslint_dir: client/src/seo-field/
@@ -99,3 +100,5 @@ jobs:
       # stylelint_max-warnings:
 ```
 Each check can be configured using inputs.
+
+> For Silverstripe 4 related Checks, use the [`4` branch](https://github.com/syntro-opensource/workflows/tree/4).
