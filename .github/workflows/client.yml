@@ -7,13 +7,6 @@ on:
   workflow_call:
     inputs:
       # -----------------------------
-      # configure Node.js
-      # -----------------------------
-      node-ver:
-        description: Which Node.js version to use
-        type: string
-        default: 18.x
-      # -----------------------------
       # configure eslint
       # -----------------------------
       eslint:
@@ -32,6 +25,10 @@ on:
       eslint_max-warnings:
         type: number
         default: 0
+      eslint_node-ver:
+        description: Which Node.js version to use for ESLint
+        type: string
+        default: 18.x
       # -----------------------------
       # configure stylelint
       # -----------------------------
@@ -45,6 +42,10 @@ on:
       stylelint_max-warnings:
         type: number
         default: 0
+      stylelint_node-ver:
+        description: Which Node.js version to use for Stylelint
+        type: string
+        default: 18.x
       # -----------------------------
       # configure Jest
       # -----------------------------
@@ -52,6 +53,10 @@ on:
         description: runs Jest tests
         type: boolean
         default: false
+      jest_node-ver:
+        description: Which Node.js version to use for Jest
+        type: string
+        default: 18.x
 
 jobs:
   eslint:
@@ -64,7 +69,7 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ inputs.node-ver }}
+        node-version: ${{ inputs.eslint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
       uses: actions/cache@v3.0.1
@@ -93,7 +98,7 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ inputs.node-ver }}
+        node-version: ${{ inputs.stylelint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
       uses: actions/cache@v3.0.1
@@ -120,7 +125,7 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ inputs.node-ver }}
+        node-version: ${{ inputs.jest_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
       uses: actions/cache@v3.0.1
