@@ -80,6 +80,9 @@ This repository also provides a testsuite for client-side code. The suite checks
 
 * ESlint
 * Stylelint
+* Jest
+
+You can also configure which Node.js version the tests run on. The test suite defaults to `18.x`.
 
 Usage is straightforward:
 
@@ -93,11 +96,15 @@ jobs:
       eslint: true
       eslint_dir: client/src/seo-field/
       eslint_configfile: client/src/seo-field/.eslintrc
+      eslint_node-ver: 16.x
       # eslint_ext:
       # eslint_max-warnings:
       stylelint: true
       stylelint_glob: client/src/seo-field/**/*.scss
+      stylelint_node-ver: 16.x
       # stylelint_max-warnings:
+      jest: true
+      jest_node-ver: 16.x
 ```
 Each check can be configured using inputs.
 

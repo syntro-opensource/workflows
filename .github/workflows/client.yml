@@ -25,6 +25,10 @@ on:
       eslint_max-warnings:
         type: number
         default: 0
+      eslint_node-ver:
+        description: Which Node.js version to use for ESLint
+        type: string
+        default: 18.x
       # -----------------------------
       # configure stylelint
       # -----------------------------
@@ -38,7 +42,21 @@ on:
       stylelint_max-warnings:
         type: number
         default: 0
-
+      stylelint_node-ver:
+        description: Which Node.js version to use for Stylelint
+        type: string
+        default: 18.x
+      # -----------------------------
+      # configure Jest
+      # -----------------------------
+      jest:
+        description: runs Jest tests
+        type: boolean
+        default: false
+      jest_node-ver:
+        description: Which Node.js version to use for Jest
+        type: string
+        default: 18.x
 
 jobs:
   eslint:
@@ -48,10 +66,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Install node
+    - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: ${{ inputs.eslint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
       uses: actions/cache@v3.0.1
@@ -77,10 +95,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Install node
+    - name: Install Node
       uses: actions/setup-node@v3
       with:
-        node-version: '16.x'
+        node-version: ${{ inputs.stylelint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
       uses: actions/cache@v3.0.1
@@ -97,3 +115,27 @@ jobs:
         npx stylelint \
           --max-warnings="${{ inputs.stylelint_max-warnings }}" \
           ${{ inputs.stylelint_glob }}
+  jest:
+    if: ${{ inputs.jest }}
+    name: 🃏 Jest
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Install Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.jest_node-ver }}
+        registry-url: 'https://registry.npmjs.org'
+    - name: Cache Node dependencies
+      uses: actions/cache@v3.0.1
+      with:
+        path: |
+          **/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: Install dependencies
+      run: npm install
+    - name: Jest test
+      run: npm test
