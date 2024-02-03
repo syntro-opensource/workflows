@@ -94,7 +94,7 @@ Usage is straightforward:
 jobs:
   silverstripe-client:
     name: 📦 Client Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/client.yml@5
+    uses: syntro-opensource/workflows/.github/workflows/client.yml@4
     with:
       eslint: true
       eslint_dir: client/src/seo-field/
