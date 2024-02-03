@@ -47,7 +47,7 @@ jobs:
             PHP_VERSION=${{ matrix.php_version }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache
           target: devenv
       -
         name: Build and push devenv with cdr
@@ -58,5 +58,5 @@ jobs:
             PHP_VERSION=${{ matrix.php_version }}
           # platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-buster-chromedriver
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/silverstripe-dev:${{ matrix.php_version }}-apache-chromedriver
           target: devenv-cdr
