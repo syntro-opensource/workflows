@@ -37,6 +37,26 @@ jobs:
       # behat_php_version: '8.1'
 ```
 
+### Working with Private Repositories
+You can enable an SSH-Client to clone private repositories described in `composer.json`. 
+**Please make sure you understand the risks of adding private keys to GitHub workflow Runs!**
+This feature can be enabled as follows:
+```yml
+# ...
+jobs:
+  silverstripe:
+    name: 🧰 Silverstripe Testsuite
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe.yml@5
+    with:
+        # ...
+        uses_private_repos: true
+        uses_private_keys: |
+            ${{ secrets.YOURPRIVATEKEY }}
+```
+We use [webfactory/ssh-agent](https://github.com/marketplace/actions/webfactory-ssh-agent) to
+enable this feature. You can find more information there.
+
+
 > For Silverstripe 4 related Checks, use the [`4` branch](https://github.com/syntro-opensource/workflows/tree/4).
 
 Each check can be configured using inputs.
@@ -107,5 +127,24 @@ jobs:
       jest_node-ver: 16.x
 ```
 Each check can be configured using inputs.
+
+### Working with Private Repositories
+You can enable an SSH-Client to clone private repositories described in `composer.json`. 
+**Please make sure you understand the risks of adding private keys to GitHub workflow Runs!**
+This feature can be enabled as follows:
+```yml
+# ...
+jobs:
+  silverstripe:
+    name: 📦 Client Testsuite
+    uses: syntro-opensource/workflows/.github/workflows/client.yml@5
+    with:
+        # ...
+        uses_private_repos: true
+        uses_private_keys: |
+            ${{ secrets.YOURPRIVATEKEY }}
+```
+We use [webfactory/ssh-agent](https://github.com/marketplace/actions/webfactory-ssh-agent) to
+enable this feature. You can find more information there.
 
 > For Silverstripe 4 related Checks, use the [`4` branch](https://github.com/syntro-opensource/workflows/tree/4).

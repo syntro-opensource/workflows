@@ -61,6 +61,17 @@ on:
       behat_php_version:
         default: '8.1'
         type: string
+      # -----------------------------
+      # private access
+      # -----------------------------
+      uses_private_repos:
+        description: if enabled, you can supply private keys to enable cloning private repositories !USE WITH CAUTION!
+        type: boolean
+        default: false
+      uses_private_keys:
+        description: The private keys to be loaded
+        type: string
+        default: ''
 
 jobs:
   phpunit:
@@ -87,6 +98,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: setup ssh agent
+        if: ${{ inputs.uses_private_repos }}
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ inputs.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -119,6 +135,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: setup ssh agent
+        if: ${{ inputs.uses_private_repos }}
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ inputs.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -177,6 +198,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: setup ssh agent
+        if: ${{ inputs.uses_private_repos }}
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ inputs.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |

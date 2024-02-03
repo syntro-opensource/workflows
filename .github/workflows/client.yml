@@ -57,6 +57,17 @@ on:
         description: Which Node.js version to use for Jest
         type: string
         default: 18.x
+      # -----------------------------
+      # private access
+      # -----------------------------
+      uses_private_repos:
+        description: if enabled, you can supply private keys to enable cloning private repositories !USE WITH CAUTION!
+        type: boolean
+        default: false
+      uses_private_keys:
+        description: The private keys to be loaded
+        type: string
+        default: ''
 
 jobs:
   eslint:
@@ -66,6 +77,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+    - name: setup ssh agent
+      if: ${{ inputs.uses_private_repos }}
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ inputs.uses_private_keys }}
     - name: Install Node
       uses: actions/setup-node@v3
       with:
@@ -95,6 +111,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+    - name: setup ssh agent
+      if: ${{ inputs.uses_private_repos }}
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ inputs.uses_private_keys }}
     - name: Install Node
       uses: actions/setup-node@v3
       with:
@@ -122,6 +143,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+    - name: setup ssh agent
+      if: ${{ inputs.uses_private_repos }}
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ inputs.uses_private_keys }}
     - name: Install Node
       uses: actions/setup-node@v3
       with:
