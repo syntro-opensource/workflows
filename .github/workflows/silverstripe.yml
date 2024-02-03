@@ -68,10 +68,9 @@ on:
         description: if enabled, you can supply private keys to enable cloning private repositories !USE WITH CAUTION!
         type: boolean
         default: false
+    secrets:
       uses_private_keys:
         description: The private keys to be loaded
-        type: string
-        default: ''
 
 jobs:
   phpunit:
@@ -102,7 +101,7 @@ jobs:
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ inputs.uses_private_keys }}
+          ssh-private-key: ${{ secrets.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -139,7 +138,7 @@ jobs:
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ inputs.uses_private_keys }}
+          ssh-private-key: ${{ secrets.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -202,7 +201,7 @@ jobs:
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ inputs.uses_private_keys }}
+          ssh-private-key: ${{ secrets.uses_private_keys }}
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
