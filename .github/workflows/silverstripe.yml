@@ -86,7 +86,7 @@ jobs:
       SS_ENVIRONMENT_TYPE: dev
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -118,7 +118,7 @@ jobs:
     container: syntrocontainer/silverstripe-dev:${{ inputs.phpstan_php_version }}-apache-buster
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: lint
         uses: chindit/actions-phpcs@master
         with:
@@ -176,7 +176,7 @@ jobs:
       DOCUMENT_ROOT: ${{ github.workspace }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get Composer Cache Directory
         id: composer-data
         run: |
