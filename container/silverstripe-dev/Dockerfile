@@ -1,5 +1,5 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION}-apache-bookworm as devenv
+FROM php:${PHP_VERSION}-apache as devenv
 ENV DEBIAN_FRONTEND=noninteractive
 
 # ----------------------
