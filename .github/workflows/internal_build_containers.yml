@@ -5,7 +5,7 @@ on:
     - cron: '0 0 1 * *'
   push:
     branches:
-      - master
+      - 5
     paths:
       - container/**
       - .github/workflows/internal_build_containers.yml
@@ -20,6 +20,8 @@ jobs:
           - '7.4'
           - '8.0'
           - '8.1'
+          - '8.2'
+          - '8.3'
     steps:
       -
         name: Checkout
