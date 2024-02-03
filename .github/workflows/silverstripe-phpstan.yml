@@ -18,7 +18,7 @@ jobs:
   phpstan:
     name: 🔺 PHPStan
     runs-on: ubuntu-latest
-    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster
+    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

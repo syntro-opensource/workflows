@@ -15,7 +15,7 @@ jobs:
   behat:
     name: 🐝 Behat
     runs-on: ubuntu-latest
-    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-buster-chromedriver
+    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache-chromedriver
     services:
       database:
         image: mysql:8.0

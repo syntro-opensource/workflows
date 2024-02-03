@@ -77,7 +77,7 @@ jobs:
     if: ${{ inputs.phpunit }}
     name: 🧩 PHPUnit
     runs-on: ubuntu-latest
-    container: syntrocontainer/silverstripe-dev:${{ inputs.phpunit_php_version }}-apache-buster
+    container: syntrocontainer/silverstripe-dev:${{ inputs.phpunit_php_version }}-apache
     services:
       database:
         image: mysql:8.0
@@ -130,7 +130,7 @@ jobs:
     if: ${{ inputs.phpstan }}
     name: 🔺 PHPStan
     runs-on: ubuntu-latest
-    container: syntrocontainer/silverstripe-dev:${{ inputs.phpstan_php_version }}-apache-buster
+    container: syntrocontainer/silverstripe-dev:${{ inputs.phpstan_php_version }}-apache
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -177,7 +177,7 @@ jobs:
     if: ${{ inputs.behat }}
     name: 🐝 Behat
     runs-on: ubuntu-latest
-    container: syntrocontainer/silverstripe-dev:${{ inputs.behat_php_version }}-apache-buster-chromedriver
+    container: syntrocontainer/silverstripe-dev:${{ inputs.behat_php_version }}-apache-chromedriver
     services:
       database:
         image: mysql:8.0
