@@ -87,7 +87,7 @@ jobs:
         node-version: ${{ inputs.eslint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
-      uses: actions/cache@v3.0.1
+      uses: actions/cache@v4.0.2
       with:
         path: |
           **/node_modules
@@ -121,7 +121,7 @@ jobs:
         node-version: ${{ inputs.stylelint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
-      uses: actions/cache@v3.0.1
+      uses: actions/cache@v4.0.2
       with:
         path: |
           **/node_modules
@@ -153,7 +153,7 @@ jobs:
         node-version: ${{ inputs.jest_node-ver }}
         registry-url: 'https://registry.npmjs.org'
     - name: Cache Node dependencies
-      uses: actions/cache@v3.0.1
+      uses: actions/cache@v4.0.2
       with:
         path: |
           **/node_modules
