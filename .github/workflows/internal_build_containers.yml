@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push devenv
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: container/silverstripe-dev
           build-args: |
@@ -51,7 +51,7 @@ jobs:
           target: devenv
       -
         name: Build and push devenv with cdr
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: container/silverstripe-dev
           build-args: |
