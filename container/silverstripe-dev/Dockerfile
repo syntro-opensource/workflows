@@ -1,13 +1,13 @@
 ARG PHP_VERSION
-FROM php:${PHP_VERSION}-apache as devenv
+FROM php:${PHP_VERSION}-apache AS devenv
 ENV DEBIAN_FRONTEND=noninteractive
 
 # ----------------------
 #   Silverstripe
 # ----------------------
 # Configure apache & PHP
-ENV DOCUMENT_ROOT /var/www/html
-ENV APACHE_SERVER_NAME localhost
+ENV DOCUMENT_ROOT=/var/www/html
+ENV APACHE_SERVER_NAME=localhost
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
 RUN set -eux; \
     install-php-extensions \
@@ -51,18 +51,19 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # ----------------------
 #   Chromedriver
 # ----------------------
-FROM devenv as devenv-cdr
-RUN set -eux; \
-    apt update -qq; \
-    apt install wget unzip libnss3 gnupg -yqq; \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - ;\
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list ;\
-    apt update -qq; \
-    apt install google-chrome-stable -yqq; \
-    rm -rf /var/lib/apt/lists/*
-# Install chromedriver
-RUN VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE); \
-    wget https://chromedriver.storage.googleapis.com/$VERSION/chromedriver_linux64.zip; \
-    unzip chromedriver_linux64.zip; \
-    mv chromedriver /usr/bin/chromedriver
-EXPOSE 9515
+# FROM devenv AS devenv-cdr
+# RUN set -eux; \
+#     apt update -qq; \
+#     apt install wget unzip libnss3 gnupg -yqq; \
+#     wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | tee /usr/share/keyrings/google-chrome.gpg >> /dev/null;\
+#     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list ;\
+#     # echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list ;\
+#     apt update -qq; \
+#     apt install google-chrome-stable -yqq; \
+#     rm -rf /var/lib/apt/lists/*
+# # Install chromedriver
+# RUN VERSION=$(curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE); \
+#     wget https://chromedriver.storage.googleapis.com/$VERSION/chromedriver_linux64.zip; \
+#     unzip chromedriver_linux64.zip; \
+#     mv chromedriver /usr/bin/chromedriver
+# EXPOSE 9515
