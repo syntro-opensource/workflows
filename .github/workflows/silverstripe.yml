@@ -96,7 +96,7 @@ jobs:
       SS_ENVIRONMENT_TYPE: dev
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: setup ssh agent
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0
@@ -133,7 +133,7 @@ jobs:
     container: syntrocontainer/silverstripe-dev:${{ inputs.phpstan_php_version }}-apache
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: setup ssh agent
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0
@@ -168,7 +168,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: lint
         uses: chindit/actions-phpcs@master
         with:
@@ -196,7 +196,7 @@ jobs:
       DOCUMENT_ROOT: ${{ github.workspace }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: setup ssh agent
         if: ${{ inputs.uses_private_repos }}
         uses: webfactory/ssh-agent@v0.8.0

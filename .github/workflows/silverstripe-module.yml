@@ -65,7 +65,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Prep Module
         uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
         with:
@@ -87,7 +87,7 @@ jobs:
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Prep Module
         uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
         with:
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: lint
         uses: chindit/actions-phpcs@master
         with:
@@ -136,7 +136,7 @@ jobs:
   #     DOCUMENT_ROOT: ${{ github.workspace }}
   #   steps:
   #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  #       uses: actions/checkout@v5
   #     - name: Prep Module
   #       uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
   #       with:
