@@ -92,7 +92,7 @@ jobs:
       # phpstan_bootstrap:
   silverstripe-module-codecoverage:
     name: 📊 Silverstripe Code Coverage
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe-codecoverage.yml@master
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module-codecoverage.yml@master
     with:
       php_version: 8.3
       silverstripe_version: 6.0
