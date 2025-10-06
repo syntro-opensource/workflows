@@ -10,5 +10,6 @@ runs:
     - name: install dependencies
       shell: bash
       run: |
+        git config --global --add safe.directory . &&\
         composer require --no-update silverstripe/recipe-cms:${{ inputs.silverstripe_version }} &&\
         composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
