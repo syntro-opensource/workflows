@@ -5,7 +5,7 @@ on:
     - cron: '0 0 1 * *'
   push:
     branches:
-      - 5
+      - master
     paths:
       - container/**
       - .github/workflows/internal_build_containers.yml

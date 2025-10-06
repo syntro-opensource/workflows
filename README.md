@@ -65,27 +65,42 @@ Each check can be configured using inputs.
 
 This repository provides a testsuite for silverstripe modules. The testsuite
 is used as the standard in our modules and checks Code in a fixed range of
-php and CMS versions:
-
-* PHP 8.1
-
-* CMS 5.0
+php and CMS versions.
 
 Usage is straightforward:
 
 ```yml
 # ...
 jobs:
-  silverstripe-module:
-    name: 🧰 Silverstripe Module Testsuite
-    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module.yml@5
+  silverstripe-module-5:
+    name: 🧰 Silverstripe Module Testsuite 5
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module-5.yml@master
     with:
       phpunit: true
       # phpunit_config_file:
       phpstan: true
       # phpstan_config:
       # phpstan_bootstrap:
-      phpcs: true
+  silverstripe-module-6:
+    name: 🧰 Silverstripe Module Testsuite 6
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-module-6.yml@master
+    with:
+      phpunit: true
+      # phpunit_config_file:
+      phpstan: true
+      # phpstan_config:
+      # phpstan_bootstrap:
+  silverstripe-module-codecoverage:
+    name: 📊 Silverstripe Code Coverage
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-codecoverage.yml@master
+    with:
+      php_version: 8.3
+      silverstripe_version: 6.0
+  silverstripe-phpcs:
+    name: 🧹 Silverstripe PHPCS
+    uses: syntro-opensource/workflows/.github/workflows/silverstripe-phpcs.yml@master
+    with:
+      dir: src/
 ```
 
 

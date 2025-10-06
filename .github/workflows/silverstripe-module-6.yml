@@ -1,0 +1,159 @@
+name: Silverstripe Module Suite v6
+# -----------------------------
+# Silverstripe module suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      # -----------------------------
+      # configure phpunit
+      # -----------------------------
+      phpunit:
+        description: runs the phpunit test
+        type: boolean
+        default: false
+      phpunit_config_file:
+        default: 'phpunit.xml'
+        type: string
+      # -----------------------------
+      # configure phpstan
+      # -----------------------------
+      phpstan:
+        description: runs the phpstan test
+        type: boolean
+        default: false
+      phpstan_config:
+        description: where to find the phpstan config
+        type: string
+        default: 'phpstan.neon'
+      phpstan_bootstrap:
+        description: the location of the bootstrap file
+        type: string
+        default: 'vendor/syntro/silverstripe-phpstan/bootstrap.php'
+      # -----------------------------
+      # configure phpcs
+      # -----------------------------
+      phpcs:
+        description: runs the phpcs test
+        type: boolean
+        default: false
+      # -----------------------------
+      # configure behat
+      # -----------------------------
+      behat:
+        description: runs the behat test
+        type: boolean
+        default: false
+jobs:
+  phpunit:
+    if: ${{ inputs.phpunit }}
+    name: 🧩 PHPUnit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: [ '8.1', '8.2', '8.3' ]
+        silverstripe_version: [ '6.0' ]
+    container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache
+    services:
+      database:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Prep Module
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        with:
+          silverstripe_version: ${{ matrix.silverstripe_version }}
+      - name: Run PHPUnit
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@master
+        with:
+          phpunit_config: ${{ inputs.phpunit_config_file }}
+          dir: tests/
+          coverage: false
+  phpstan:
+    if: ${{ inputs.phpstan }}
+    name: 🔺 PHPStan
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php_version: [ '8.1', '8.2', '8.3' ]
+        silverstripe_version: [ '6.0' ]
+    container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Prep Module
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        with:
+          silverstripe_version: ${{ matrix.silverstripe_version }}
+      - name: Run PHPStan
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
+        with:
+          phpstan_config: ${{ inputs.phpstan_config }}
+          phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
+          dir: src/
+  # phpcs:
+  #   if: ${{ inputs.phpcs }}
+  #   name: 🔮 PHPcs
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: lint
+  #       uses: chindit/actions-phpcs@master
+  #       with:
+  #         dir: src/
+  # behat:
+  #   if: ${{ inputs.behat }}
+  #   name: 🐝 Behat
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       php_version: [ '8.1' ]
+  #       silverstripe_version: [ '5.0' ]
+  #   container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache-chromedriver
+  #   services:
+  #     database:
+  #       image: mysql:8.0
+  #       ports:
+  #         - 3306:3306
+  #       options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+  #       env:
+  #         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  #   env:
+  #     SS_ENVIRONMENT_TYPE: "dev"
+  #     SS_BASE_URL: http://localhost:80
+  #     SS_DATABASE_SERVER: database
+  #     SS_DATABASE_NAME: ss_default_${{ matrix.php_version }}
+  #     SS_DATABASE_USERNAME: root
+  #     SS_DATABASE_PASSWORD: ''
+  #     DOCUMENT_ROOT: ${{ github.workspace }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: Prep Module
+  #       uses: syntro-opensource/workflows/actions/silverstripe-module-prep@5
+  #       with:
+  #         silverstripe_version: ${{ matrix.silverstripe_version }}
+  #     - name: start apache
+  #       run: |
+  #         set -eux; \
+  #         mkdir public/assets; \
+  #         chmod ugo+rw -R .; \
+  #         apache2-foreground &> apache.log 2> apache-error.log; \
+  #         chromedriver &> chromedriver.log 2> chromedriver-error.log
+  #     - name: Run Behat
+  #       run: vendor/bin/behat --strict
+  #     - name: Archive code coverage results
+  #       if: ${{ failure() }}
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: behat-results
+  #         path: artifacts/*
+  #         retention-days: 1

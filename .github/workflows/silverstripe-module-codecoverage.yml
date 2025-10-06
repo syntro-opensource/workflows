@@ -1,0 +1,49 @@
+name: Silverstripe Module Suite v6
+# -----------------------------
+# Silverstripe module suite
+# -----------------------------
+
+on:
+  workflow_call:
+    inputs:
+      # -----------------------------
+      # configure versions and phpunit
+      # -----------------------------
+      phpunit_config_file:
+        default: 'phpunit.xml'
+        type: string
+      php_version:
+        description: which php version to use
+        type: string
+        default: '8.1'
+      silverstripe_version:
+        description: which silverstripe version to use
+        type: string
+        default: '6.0'
+
+jobs:
+  phpunit:
+    name: 🧩 PHPUnit
+    runs-on: ubuntu-latest
+    container: syntrocontainer/silverstripe-dev:${{ inputs.php_version }}-apache
+    services:
+      database:
+        image: mysql:5.7
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Prep Module
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
+        with:
+          silverstripe_version: ${{ inputs.silverstripe_version }}
+      - name: Run PHPUnit
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpunit@master
+        with:
+          phpunit_config: ${{ inputs.phpunit_config_file }}
+          dir: tests/
+          coverage: true
