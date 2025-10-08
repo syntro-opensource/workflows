@@ -93,7 +93,7 @@ jobs:
         with:
           silverstripe_version: ${{ matrix.silverstripe_version }}
       - name: Run PHPStan
-        uses: cotpat/workflows/actions/silverstripe-module-phpstan@master
+        uses: cotpat/workflows/actions/silverstripe-module-phpstan@patch-1
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
           phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
