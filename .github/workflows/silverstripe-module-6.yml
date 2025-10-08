@@ -30,7 +30,7 @@ on:
       phpstan_bootstrap:
         description: the location of the bootstrap file
         type: string
-        default: 'vendor/syntro/silverstripe-phpstan/bootstrap.php'
+        default: null
       # -----------------------------
       # configure phpcs
       # -----------------------------
