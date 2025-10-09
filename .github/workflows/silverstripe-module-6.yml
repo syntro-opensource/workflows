@@ -27,10 +27,6 @@ on:
         description: where to find the phpstan config
         type: string
         default: 'phpstan.neon'
-      phpstan_bootstrap:
-        description: the location of the bootstrap file
-        type: string
-        default: null
       # -----------------------------
       # configure phpcs
       # -----------------------------
