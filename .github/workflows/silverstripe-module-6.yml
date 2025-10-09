@@ -92,7 +92,6 @@ jobs:
         uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
-          phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
           dir: src/
   # phpcs:
   #   if: ${{ inputs.phpcs }}
