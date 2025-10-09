@@ -89,11 +89,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Prep Module
-        uses: cotpat/workflows/actions/silverstripe-module-prep@master
+        uses: syntro-opensource/workflows/actions/silverstripe-module-prep@master
         with:
           silverstripe_version: ${{ matrix.silverstripe_version }}
       - name: Run PHPStan
-        uses: cotpat/workflows/actions/silverstripe-module-phpstan@patch-1
+        uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
           phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
