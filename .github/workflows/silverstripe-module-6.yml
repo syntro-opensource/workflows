@@ -27,10 +27,6 @@ on:
         description: where to find the phpstan config
         type: string
         default: 'phpstan.neon'
-      phpstan_bootstrap:
-        description: the location of the bootstrap file
-        type: string
-        default: 'vendor/syntro/silverstripe-phpstan/bootstrap.php'
       # -----------------------------
       # configure phpcs
       # -----------------------------
@@ -96,7 +92,6 @@ jobs:
         uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
-          phpstan_bootstrap: ${{ inputs.phpstan_bootstrap }}
           dir: src/
   # phpcs:
   #   if: ${{ inputs.phpcs }}

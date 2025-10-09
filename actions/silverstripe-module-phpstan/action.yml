@@ -21,4 +21,4 @@ runs:
   steps:
     - name: run phpstan
       shell: bash
-      run: ${{ inputs.phpstan_binary }} analyse ${{ inputs.dir }} -c "${{ inputs.phpstan_config }}" -a ${{ inputs.phpstan_bootstrap }} --level ${{ inputs.phpstan_level }}
+      run: ${{ inputs.phpstan_binary }} analyse ${{ inputs.dir }} -c "${{ inputs.phpstan_config }}" --level ${{ inputs.phpstan_level }}
