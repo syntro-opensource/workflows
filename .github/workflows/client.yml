@@ -82,7 +82,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.uses_private_keys }}
     - name: Install Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.eslint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
@@ -116,7 +116,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.uses_private_keys }}
     - name: Install Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.stylelint_node-ver }}
         registry-url: 'https://registry.npmjs.org'
@@ -148,7 +148,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.uses_private_keys }}
     - name: Install Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ inputs.jest_node-ver }}
         registry-url: 'https://registry.npmjs.org'
