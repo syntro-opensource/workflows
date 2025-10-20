@@ -27,6 +27,10 @@ on:
         description: where to find the phpstan config
         type: string
         default: 'phpstan.neon'
+      phpstan_srcdir:
+        description: where to find the application source directory
+        type: string
+        default: './src/'
       # -----------------------------
       # configure phpcs
       # -----------------------------
@@ -92,7 +96,7 @@ jobs:
         uses: syntro-opensource/workflows/actions/silverstripe-module-phpstan@master
         with:
           phpstan_config: ${{ inputs.phpstan_config }}
-          dir: src/
+          dir: ${{ inputs.phpstan_srcdir }}
   # phpcs:
   #   if: ${{ inputs.phpcs }}
   #   name: 🔮 PHPcs
