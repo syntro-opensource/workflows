@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         php_version: [ '8.3' ]
-        silverstripe_version: [ '6.0' ]
+        silverstripe_version: [ '6.0', '6.1' ]
     container: syntrocontainer/silverstripe-dev:${{ matrix.php_version }}-apache
     steps:
       - name: Checkout Code
