@@ -107,7 +107,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config --global data-dir)"
       - name: Cache Composer Cache
-        uses: actions/cache@v4.2.2
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ${{ steps.composer-data.outputs.dir }}
@@ -144,7 +144,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config --global data-dir)"
       - name: Cache Composer Cache and dependencies
-        uses: actions/cache@v4.2.2
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ${{ steps.composer-data.outputs.dir }}
@@ -206,7 +206,7 @@ jobs:
         run: |
           echo "::set-output name=dir::$(composer config --global data-dir)"
       - name: Cache Composer Cache and dependencies
-        uses: actions/cache@v4.2.2
+        uses: actions/cache@v4.3.0
         with:
           path: |
             ${{ steps.composer-data.outputs.dir }}
